@@ -1,5 +1,9 @@
 #pragma once
-
+#include "DeviceEnumerator.h"
+#define WINDOW_TITLE "Device Manager"
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 500
+#define WINDOW_SPLITTER_DISTANCE 70
 namespace IapdDeviceManager {
 
 	using namespace System;
@@ -12,9 +16,13 @@ namespace IapdDeviceManager {
 	public ref class MainWindow : public System::Windows::Forms::Form
 	{	
 	private:
+		SplitContainer ^splitContainer;
+		TreeView ^tree;
 		System::ComponentModel::Container ^components;
 
 		void InitializeComponent();
+		void SetTree();
+		void SetTreeItems();
 
 	protected:
 		~MainWindow();

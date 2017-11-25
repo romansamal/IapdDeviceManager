@@ -11,20 +11,6 @@ DeviceEnumerator::~DeviceEnumerator()
 }
 
 
-string DeviceEnumerator::getDeviceClassDescription(SP_DEVINFO_DATA spDevInfoData)
-{
-	char  buff[MAX_PATH] = { 0 };
-	DWORD requireSize;
-
-	if (!SetupDiGetClassDescriptionA(&spDevInfoData.ClassGuid,
-		buff,
-		MAX_PATH,
-		&requireSize))
-		return string("\0");
-	else
-		return string(buff);
-}
-
 vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 {
 	vector<DEVICE_INFO> vectorBuff;
@@ -44,12 +30,24 @@ vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 			&spDevInfoData))
 		{
 			deviceInfo.spDevInfoData = spDevInfoData;
-			deviceInfo.classDescription = getDeviceClassDescription(spDevInfoData);
+			deviceInfo.classDescription = Device::getDeviceClassDescription(spDevInfoData);
 			vectorBuff.push_back(deviceInfo);
+			string name = Device::getDeviceName(hDevInfo, spDevInfoData);
 			index++;
 		}
 		else
 			break;
 	}
 	return vectorBuff; 
+}
+
+set<string> DeviceEnumerator::getDeviceTypes()
+{
+	set<string> temp;
+	vector<DEVICE_INFO> vectorBuff = getDevices();
+	for (int i = 0; i < vectorBuff.size(); i++)
+	{
+		temp.insert(vectorBuff.at(i).classDescription);
+	}
+	return temp;
 }

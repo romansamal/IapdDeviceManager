@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <set>
 #include <Windows.h>
 #include <setupapi.h>
+#include "Device.h"
 using namespace std;
 
 #pragma comment(lib, "setupapi.lib")
@@ -15,10 +17,10 @@ typedef struct DEVICE_INFO
 
 class DeviceEnumerator
 {
-private:
-	static string getDeviceClassDescription(SP_DEVINFO_DATA spDevInfoData);
+
 public:
 	static vector<DEVICE_INFO> getDevices();
+	static set<string> getDeviceTypes();
 	DeviceEnumerator();
 	~DeviceEnumerator();
 };

@@ -146,11 +146,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceEnumerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Device.h" />
     <ClInclude Include="DeviceEnumerator.h" />
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
