@@ -13,6 +13,7 @@ typedef struct DEVICE_INFO
 {
 	SP_DEVINFO_DATA spDevInfoData;
 	string classDescription;
+	string deviceName;
 }DEV_INFO;
 
 class DeviceEnumerator

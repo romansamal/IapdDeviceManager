@@ -39,14 +39,27 @@ void MainWindow::SetTree()
 		string item = *iter;
 		if (item != "")
 		{
-			String ^deviceDescription = gcnew String(item.c_str());
-			TreeNode ^newNode = gcnew TreeNode(deviceDescription);
+			String ^classDescription = gcnew String(item.c_str());
+			TreeNode ^newNode = gcnew TreeNode(classDescription);
+			newNode->Name = classDescription;
 			tree->Nodes->Add(newNode);
 		}
 	}
+	SetTreeItems();
 }
 
 void MainWindow::SetTreeItems()
 {
+	vector<DEVICE_INFO> deviceInfo = DeviceEnumerator::getDevices();
+	for (int i = 0; i < deviceInfo.size(); i++)
+	{
+		String ^classDescription = gcnew String(deviceInfo.at(i).classDescription.c_str());
+		cli::array<TreeNode ^> ^nodes = tree->Nodes->Find(classDescription, false);
+		String ^deviceDescription = gcnew String(deviceInfo.at(i).deviceName.c_str());
+		TreeNode ^newNode = gcnew TreeNode(deviceDescription);
+		newNode->Name = deviceDescription;
+		if (nodes->Length > 0)
+			nodes[0]->Nodes->Add(newNode);
 
+	}
 }
