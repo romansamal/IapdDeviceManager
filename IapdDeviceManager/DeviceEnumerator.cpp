@@ -32,7 +32,7 @@ vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 			deviceInfo.spDevInfoData = spDevInfoData;
 			deviceInfo.classDescription = Device::getDeviceClassDescription(spDevInfoData);
 			deviceInfo.deviceName = Device::getDeviceName(hDevInfo, spDevInfoData);
-
+			deviceInfo.GUID = Device::getGUID(hDevInfo, spDevInfoData);
 			vectorBuff.push_back(deviceInfo);
 			index++;
 		}

@@ -12,6 +12,7 @@ public:
 	Device();
 	static string getDeviceClassDescription(SP_DEVINFO_DATA spDevInfoData);
 	static string getDeviceName(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData);
+	static string getGUID(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData);
 	~Device();
 };
 
