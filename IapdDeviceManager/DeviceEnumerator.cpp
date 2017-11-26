@@ -15,20 +15,22 @@ vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 {
 	if (vectorDeviceInfo.size() != 0)
 		return vector<DEV_INFO>(vectorDeviceInfo);
+	DEV_INFO deviceInfo;
 	HDEVINFO hDevInfo = 0;
 	SP_DEVINFO_DATA spDevInfoData = { 0 };
 	SP_DRVINFO_DATA spDrvInfoData = { 0 };
 	SP_DRVINFO_DETAIL_DATA spDrvInfoDetail = { 0 };
 	int index = 0;
-
 	hDevInfo = SetupDiGetClassDevs(0, 0, NULL, DIGCF_PRESENT |
 		DIGCF_ALLCLASSES | DIGCF_PROFILE);
 
+
+	deviceInfo.hDevInfo = hDevInfo;
 	spDevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 	spDrvInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
 	while (1)
 	{
-		DEV_INFO deviceInfo;
+		
 		if (SetupDiEnumDeviceInfo(hDevInfo,
 			index,
 			&spDevInfoData))

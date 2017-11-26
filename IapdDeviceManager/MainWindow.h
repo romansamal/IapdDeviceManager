@@ -29,6 +29,7 @@ namespace IapdDeviceManager {
 		void SetTree();
 		void SetTreeItems();
 		void Tree_Click(System::Object^ Sender, TreeViewEventArgs ^e);
+		void Tree_DoubleClick(System::Object^ Sender, EventArgs ^e);
 
 	protected:
 		~MainWindow();

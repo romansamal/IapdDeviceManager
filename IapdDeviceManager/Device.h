@@ -2,9 +2,11 @@
 #define BUFFERL_SIZE 2048
 #define REG_PATH "SYSTEM\\CurrentControlSet\\Services\\\0"
 #define REG_IMAGE "ImagePath"
+#define DISC_DISABLE 2
+#define DISC_ENABLE 1
 #include <string>
 #include <Windows.h>
-#include <setupapi.h>
+#include <SetupApi.h>
 using namespace std;
 
 #pragma comment(lib, "setupapi.lib")
@@ -20,6 +22,7 @@ public:
 	static void getDriverInfo(GUID guid, string *hardwareID, string *manufacturer, string *provider, string *driverDescription);
 	static string getDevicePath(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData);
 	static string getDriverFullName(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData);
+	static bool deviceChangeStatus(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData, bool newStatus);
 	~Device();
 };
 

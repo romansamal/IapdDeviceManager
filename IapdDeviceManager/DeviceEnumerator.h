@@ -11,6 +11,7 @@ using namespace std;
 
 typedef struct DEVICE_INFO
 {
+	HDEVINFO hDevInfo;
 	SP_DEVINFO_DATA spDevInfoData;
 	string classDescription;
 	string deviceName;

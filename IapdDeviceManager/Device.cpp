@@ -203,3 +203,27 @@ string Device::getDriverFullName(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoDat
 	}	
 	return result;
 }
+
+bool Device::deviceChangeStatus(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData, bool newStatus)
+{
+	SP_PROPCHANGE_PARAMS spPropChangeParams;
+
+	spPropChangeParams.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
+	spPropChangeParams.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
+	spPropChangeParams.Scope = DICS_FLAG_GLOBAL;
+	if (newStatus)
+		spPropChangeParams.StateChange = DISC_ENABLE; 
+	else
+		spPropChangeParams.StateChange = DISC_DISABLE;
+	DWORD errorCode;
+	//   
+	if (SetupDiSetClassInstallParams(hDevInfo, &spDevInfoData, &spPropChangeParams.ClassInstallHeader, sizeof(spPropChangeParams)))
+	{
+		if (SetupDiCallClassInstaller(DIF_PROPERTYCHANGE, hDevInfo, &spDevInfoData))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+

@@ -29,6 +29,7 @@ void MainWindow::InitializeComponent()
 	tree = gcnew TreeView();
 	tree->Dock = DockStyle::Fill;
 	tree->AfterSelect += gcnew TreeViewEventHandler(this, &MainWindow::Tree_Click);
+	tree->DoubleClick += gcnew EventHandler(this, &MainWindow::Tree_DoubleClick);
 	splitContainer = gcnew SplitContainer();
 	splitContainer->Panel1->Controls->Add(tree);
 	splitContainer->Panel2->Controls->Add(list);
@@ -117,6 +118,22 @@ void MainWindow::Tree_Click(System::Object^ Sender, TreeViewEventArgs ^e)
 			String ^devicePathM = gcnew String(info.devicePath.c_str());
 			devicePathItem->SubItems->Add(devicePathM);
 			list->Items->Add(devicePathItem);
+			return;
+		}
+	}
+}
+
+void MainWindow::Tree_DoubleClick(System::Object^ Sender, EventArgs ^e)
+{
+	vector<DEVICE_INFO> deviceInfo = DeviceEnumerator::getDevices();
+	TreeNode ^ node = tree->SelectedNode;
+	for (vector<DEVICE_INFO>::iterator it = deviceInfo.begin(); it != deviceInfo.end(); it++)
+	{
+		DEV_INFO info = *it;
+		String ^name = gcnew String(info.deviceName.c_str());
+		if (node->Text == name)
+		{
+			Device::deviceChangeStatus(info.hDevInfo, info.spDevInfoData, false);
 			return;
 		}
 	}
