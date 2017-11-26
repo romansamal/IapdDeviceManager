@@ -1,6 +1,6 @@
 #include "DeviceEnumerator.h"
 
-
+vector<DEVICE_INFO> DeviceEnumerator::vectorDeviceInfo;
 DeviceEnumerator::DeviceEnumerator()
 {
 }
@@ -13,7 +13,8 @@ DeviceEnumerator::~DeviceEnumerator()
 
 vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 {
-	vector<DEVICE_INFO> vectorBuff;
+	if (vectorDeviceInfo.size() != 0)
+		return vector<DEV_INFO>(vectorDeviceInfo);
 	HDEVINFO hDevInfo = 0;
 	SP_DEVINFO_DATA spDevInfoData = { 0 };
 	SP_DRVINFO_DATA spDrvInfoData = { 0 };
@@ -37,17 +38,17 @@ vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 			deviceInfo.deviceName = Device::getDeviceName(hDevInfo, spDevInfoData);
 			deviceInfo.guid_string = Device::getGUID(hDevInfo, spDevInfoData);
 			deviceInfo.guid = spDevInfoData.ClassGuid;
-			Device::getDriverInfo(deviceInfo.guid, &deviceInfo.hardwareID, &deviceInfo.manufacturer, &deviceInfo.provider, &deviceInfo.driverDescription);
+			//Device::getDriverInfo(deviceInfo.guid, &deviceInfo.hardwareID, &deviceInfo.manufacturer, &deviceInfo.provider, &deviceInfo.driverDescription);
 			deviceInfo.devicePath = Device::getDevicePath(hDevInfo, spDevInfoData);
 			deviceInfo.driverFullName = Device::getDriverFullName(hDevInfo, spDevInfoData);
 
-			vectorBuff.push_back(deviceInfo);
+			vectorDeviceInfo.push_back(deviceInfo);
 			index++;
 		}
 		else
 			break;
 	}
-	return vectorBuff; 
+	return vector<DEV_INFO>(vectorDeviceInfo); 
 }
 
 set<string> DeviceEnumerator::getDeviceTypes()

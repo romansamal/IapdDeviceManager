@@ -109,16 +109,14 @@ void Device::getDriverInfo(GUID guid , string *hardwareID, string *manufacturer,
 						*hardwareID = string(spDrvInfoDetail.HardwareID);
 						*driverDescription = string(spDrvInfoDetail.DrvDescription);
 						index++;
+						continue;
 					}
+					
 				}
-				else
-					break;
-				
+				break;
 			}
 			
 		}
-
-		
 	}
 	
 }

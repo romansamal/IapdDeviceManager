@@ -26,7 +26,8 @@ typedef struct DEVICE_INFO
 
 class DeviceEnumerator
 {
-
+private:
+	static vector<DEVICE_INFO> vectorDeviceInfo;
 public:
 	static vector<DEVICE_INFO> getDevices();
 	static set<string> getDeviceTypes();

@@ -21,10 +21,17 @@ void MainWindow::InitializeComponent()
 	this->Text = WINDOW_TITLE;
 	this->Padding = System::Windows::Forms::Padding(0);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+	list = gcnew ListView();
+	list->View = View::Details;
+	list->Columns->Add(LISTVIEW_COL1, LISTVIEW_COL1_WIDTH, HorizontalAlignment::Center);
+	list->Columns->Add(LISTVIEW_COL2, LISTVIEW_COL2_WIDTH, HorizontalAlignment::Center);
+	list->Dock = DockStyle::Fill;
 	tree = gcnew TreeView();
 	tree->Dock = DockStyle::Fill;
+	tree->AfterSelect += gcnew TreeViewEventHandler(this, &MainWindow::Tree_Click);
 	splitContainer = gcnew SplitContainer();
 	splitContainer->Panel1->Controls->Add(tree);
+	splitContainer->Panel2->Controls->Add(list);
 	splitContainer->Dock = DockStyle::Fill;
 	splitContainer->SplitterDistance = WINDOW_SPLITTER_DISTANCE;
 	Controls->Add(splitContainer);
@@ -61,5 +68,56 @@ void MainWindow::SetTreeItems()
 		if (nodes->Length > 0)
 			nodes[0]->Nodes->Add(newNode);
 
+	}
+}
+
+void MainWindow::Tree_Click(System::Object^ Sender, TreeViewEventArgs ^e)
+{
+	vector<DEVICE_INFO> deviceInfo = DeviceEnumerator::getDevices();
+	TreeNode ^ node = tree->SelectedNode;
+	list->Items->Clear();
+	for (vector<DEVICE_INFO>::iterator it = deviceInfo.begin(); it != deviceInfo.end() ; it++)
+	{
+		DEV_INFO info = *it;
+		String ^name = gcnew String(info.deviceName.c_str());
+		if (node->Text == name)
+		{
+			Device::getDriverInfo(info.guid, &info.hardwareID, &info.manufacturer, &info.provider, &info.driverDescription);
+			ListViewItem ^guidItem = gcnew ListViewItem("GUID");
+			String ^guidM = gcnew String(info.guid_string.c_str());
+			guidItem->SubItems->Add(guidM);
+			list->Items->Add(guidItem);
+			
+			ListViewItem ^HIDItem = gcnew ListViewItem("Hardware ID");
+			String ^HIDM = gcnew String(info.hardwareID.c_str());
+			HIDItem->SubItems->Add(HIDM);
+			list->Items->Add(HIDItem);
+
+			ListViewItem ^manufacturerItem = gcnew ListViewItem("Manufacturer");
+			String ^manufacturerM = gcnew String(info.manufacturer.c_str());
+			manufacturerItem->SubItems->Add(manufacturerM);
+			list->Items->Add(manufacturerItem);
+
+			ListViewItem ^providerItem = gcnew ListViewItem("Provider");
+			String ^providerM = gcnew String(info.provider.c_str());
+			providerItem->SubItems->Add(providerM);
+			list->Items->Add(providerItem);
+
+			ListViewItem ^driverDescItem = gcnew ListViewItem("Driver description");
+			String ^driverDescM = gcnew String(info.driverDescription.c_str());
+			driverDescItem->SubItems->Add(driverDescM);
+			list->Items->Add(driverDescItem);
+
+			ListViewItem ^driverFullNameItem = gcnew ListViewItem("Driver full name");
+			String ^driverFullNameM = gcnew String(info.driverFullName.c_str());
+			driverFullNameItem->SubItems->Add(driverFullNameM);
+			list->Items->Add(driverFullNameItem);
+
+			ListViewItem ^devicePathItem = gcnew ListViewItem("Device path");
+			String ^devicePathM = gcnew String(info.devicePath.c_str());
+			devicePathItem->SubItems->Add(devicePathM);
+			list->Items->Add(devicePathItem);
+			return;
+		}
 	}
 }
