@@ -14,7 +14,13 @@ typedef struct DEVICE_INFO
 	SP_DEVINFO_DATA spDevInfoData;
 	string classDescription;
 	string deviceName;
-	string GUID;
+	string guid_string;
+	GUID guid;
+	string hardwareID;
+	string manufacturer;
+	string provider;
+	string driverDescription;
+	string devicePath;
 }DEV_INFO;
 
 class DeviceEnumerator
