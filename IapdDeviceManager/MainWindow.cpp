@@ -118,6 +118,11 @@ void MainWindow::Tree_Click(System::Object^ Sender, TreeViewEventArgs ^e)
 			String ^devicePathM = gcnew String(info.devicePath.c_str());
 			devicePathItem->SubItems->Add(devicePathM);
 			list->Items->Add(devicePathItem);
+
+			ListViewItem ^isEnabledItem = gcnew ListViewItem("Is enabled");
+			String ^isEnabledM = gcnew String(info.isEnabled ? "true" : "false");
+			isEnabledItem->SubItems->Add(isEnabledM);
+			list->Items->Add(isEnabledItem);
 			return;
 		}
 	}
@@ -127,14 +132,23 @@ void MainWindow::Tree_DoubleClick(System::Object^ Sender, EventArgs ^e)
 {
 	vector<DEVICE_INFO> deviceInfo = DeviceEnumerator::getDevices();
 	TreeNode ^ node = tree->SelectedNode;
+	int index = 0;
 	for (vector<DEVICE_INFO>::iterator it = deviceInfo.begin(); it != deviceInfo.end(); it++)
 	{
 		DEV_INFO info = *it;
 		String ^name = gcnew String(info.deviceName.c_str());
 		if (node->Text == name)
 		{
-			Device::deviceChangeStatus(info.hDevInfo, info.spDevInfoData, false);
+			if (Device::deviceChangeStatus(info.hDevInfo, info.spDevInfoData, !info.isEnabled))
+			{
+				tree->Nodes->Clear();
+				SetTree();
+				return;
+			}
+			
+			MessageBox::Show("Can't disable device.", "Error", MessageBoxButtons::OK);
 			return;
 		}
+		index++;
 	}
 }

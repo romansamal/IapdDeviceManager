@@ -13,8 +13,7 @@ DeviceEnumerator::~DeviceEnumerator()
 
 vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 {
-	if (vectorDeviceInfo.size() != 0)
-		return vector<DEV_INFO>(vectorDeviceInfo);
+	vectorDeviceInfo.clear();
 	DEV_INFO deviceInfo;
 	HDEVINFO hDevInfo = 0;
 	SP_DEVINFO_DATA spDevInfoData = { 0 };
@@ -43,7 +42,7 @@ vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 			//Device::getDriverInfo(deviceInfo.guid, &deviceInfo.hardwareID, &deviceInfo.manufacturer, &deviceInfo.provider, &deviceInfo.driverDescription);
 			deviceInfo.devicePath = Device::getDevicePath(hDevInfo, spDevInfoData);
 			deviceInfo.driverFullName = Device::getDriverFullName(hDevInfo, spDevInfoData);
-
+			deviceInfo.isEnabled = Device::isEnabled(spDevInfoData);
 			vectorDeviceInfo.push_back(deviceInfo);
 			index++;
 		}

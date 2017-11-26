@@ -143,9 +143,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DeviceEnumerator.cpp" />
     <ClCompile Include="main.cpp" />

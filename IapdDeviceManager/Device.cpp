@@ -204,14 +204,14 @@ string Device::getDriverFullName(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoDat
 	return result;
 }
 
-bool Device::deviceChangeStatus(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData, bool newStatus)
+bool Device::deviceChangeStatus(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData, bool status)
 {
 	SP_PROPCHANGE_PARAMS spPropChangeParams;
 
 	spPropChangeParams.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
 	spPropChangeParams.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 	spPropChangeParams.Scope = DICS_FLAG_GLOBAL;
-	if (newStatus)
+	if (status)
 		spPropChangeParams.StateChange = DISC_ENABLE; 
 	else
 		spPropChangeParams.StateChange = DISC_DISABLE;
@@ -227,3 +227,10 @@ bool Device::deviceChangeStatus(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData
 	return false;
 }
 
+
+bool Device::isEnabled(SP_DEVINFO_DATA spDevInfoData)
+{
+	ULONG status = 0, problem = 0;
+	CONFIGRET cr = CM_Get_DevNode_Status(&status, &problem, spDevInfoData.DevInst, 0); 
+	return problem != PROBLEM_CODE;
+}
