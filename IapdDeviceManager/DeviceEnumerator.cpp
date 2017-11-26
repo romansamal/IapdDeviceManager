@@ -39,6 +39,7 @@ vector<DEVICE_INFO> DeviceEnumerator::getDevices()
 			deviceInfo.guid = spDevInfoData.ClassGuid;
 			Device::getDriverInfo(deviceInfo.guid, &deviceInfo.hardwareID, &deviceInfo.manufacturer, &deviceInfo.provider, &deviceInfo.driverDescription);
 			deviceInfo.devicePath = Device::getDevicePath(hDevInfo, spDevInfoData);
+			deviceInfo.driverFullName = Device::getDriverFullName(hDevInfo, spDevInfoData);
 
 			vectorBuff.push_back(deviceInfo);
 			index++;

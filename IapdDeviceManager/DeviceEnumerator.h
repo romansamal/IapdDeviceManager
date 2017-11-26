@@ -21,6 +21,7 @@ typedef struct DEVICE_INFO
 	string provider;
 	string driverDescription;
 	string devicePath;
+	string driverFullName;
 }DEV_INFO;
 
 class DeviceEnumerator

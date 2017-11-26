@@ -162,3 +162,46 @@ string Device::getDevicePath(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData)
 	}
 	return result;
 }
+
+string Device::getDriverFullName(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData)
+{
+	string result;
+	char serviceName[64];
+	//Get service name of device
+	if (SetupDiGetDeviceRegistryPropertyA(hDevInfo,
+		&spDevInfoData,
+		SPDRP_SERVICE,
+		0,
+		(PBYTE)serviceName,
+		63,
+		0))
+	{
+		HKEY  hKey = 0;
+		char szSubKey[128] = { REG_PATH };
+		char szPath[MAX_PATH] = { 0 };
+		DWORD cbData;
+		DWORD dwType;
+		strcat(szSubKey, serviceName);
+		if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+			szSubKey,
+			0,
+			KEY_ALL_ACCESS,
+			&hKey) == ERROR_SUCCESS)
+		{
+			cbData = MAX_PATH - 1;
+			dwType = REG_EXPAND_SZ;
+			if (RegQueryValueExA(hKey, REG_IMAGE, 0L,
+				&dwType,
+				(unsigned char*)szPath,
+				&cbData) == ERROR_SUCCESS)
+			{
+				char szRoot[MAX_PATH] = { 0 };
+				GetWindowsDirectoryA(szRoot, MAX_PATH - 1);
+				strcat(szRoot, "\\");
+				strcat(szRoot, szPath);
+				result = string(szRoot);
+			}
+		}
+	}	
+	return result;
+}
