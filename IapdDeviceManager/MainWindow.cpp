@@ -66,6 +66,8 @@ void MainWindow::SetTreeItems()
 		String ^deviceDescription = gcnew String(deviceInfo.at(i).deviceName.c_str());
 		TreeNode ^newNode = gcnew TreeNode(deviceDescription);
 		newNode->Name = deviceDescription;
+		String ^deviceGuid = gcnew String(deviceInfo.at(i).guid_string.c_str());
+		newNode->Tag = deviceGuid;
 		if (nodes->Length > 0)
 			nodes[0]->Nodes->Add(newNode);
 
@@ -81,7 +83,9 @@ void MainWindow::Tree_Click(System::Object^ Sender, TreeViewEventArgs ^e)
 	{
 		DEV_INFO info = *it;
 		String ^name = gcnew String(info.deviceName.c_str());
-		if (node->Text == name)
+		String ^guid = gcnew String(info.guid_string.c_str());
+		String ^tag = (String ^)node->Tag;
+		if (node->Text == name && tag == guid)
 		{
 			Device::getDriverInfo(info.guid, &info.hardwareID, &info.manufacturer, &info.provider, &info.driverDescription);
 			ListViewItem ^guidItem = gcnew ListViewItem("GUID");
