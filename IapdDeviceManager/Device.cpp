@@ -59,7 +59,6 @@ string Device::getGUID(HDEVINFO hDevInfo, SP_DEVINFO_DATA spDevInfoData)
 		(PBYTE)buff,
 		MAX_PATH,
 		0);
-	int s = 0;
 	return string(buff);
 }
 

@@ -147,6 +147,7 @@ void MainWindow::Tree_DoubleClick(System::Object^ Sender, EventArgs ^e)
 			{
 				tree->Nodes->Clear();
 				SetTree();
+				list->Items->Clear();
 				return;
 			}
 			
